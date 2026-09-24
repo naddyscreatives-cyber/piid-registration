@@ -2,6 +2,7 @@
 // Depends on: app/globals.css.
 
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'PIID Summit — Register',
@@ -25,7 +26,10 @@ export const viewport = {
 export default function UiRootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
