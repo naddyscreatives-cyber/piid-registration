@@ -1,0 +1,108 @@
+/* FILE: app/globals.css — Global Tailwind layer + the floating-label and status-card primitives.
+   Depends on: tailwind.config.js. Imported once by app/layout.js.
+   Art direction: Build Spec Section 2. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== SECTION: BASE CANVAS ===== */
+@layer base {
+  html,
+  body {
+    @apply bg-canvas text-slate-900 antialiased;
+    /* Zero horizontal overflow at every breakpoint (Spec 2 — Responsiveness) */
+    overflow-x: hidden;
+  }
+
+  /* Visible focus ring everywhere — admins may tab through with a
+     bluetooth keyboard/scanner (Spec 2 — Accessibility). */
+  :focus-visible {
+    @apply outline-none ring-4 ring-piid-blue/35 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  /* ===== SECTION: FLOATING LABEL INPUT =====
+     Pattern: the <input> keeps a real placeholder of " " so the CSS
+     :placeholder-shown selector can tell "empty" from "filled".
+     The <label> is a real label bound with htmlFor — it stays in the
+     accessibility tree, it is not a decorative span (Spec 2 — Accessibility). */
+  .ui-field {
+    @apply relative;
+  }
+
+  /* NOTE: the `peer` marker class cannot live inside @apply, so it is added
+     directly in the JSX (components/FormFields.js) alongside .ui-input. */
+  .ui-input {
+    @apply w-full rounded-2xl border-2 border-slate-200 bg-white px-4 pb-2.5 pt-6
+           text-base text-slate-900 shadow-sm transition-all duration-300 ease-in-out
+           placeholder-transparent
+           hover:border-slate-300
+           focus:border-piid-blue focus:shadow-md focus:outline-none;
+  }
+
+  .ui-input--error {
+    @apply border-rose-400 focus:border-rose-500;
+  }
+
+  .ui-label {
+    @apply pointer-events-none absolute left-4 top-4 origin-left text-base text-slate-400
+           transition-all duration-300 ease-in-out
+           peer-focus:top-2 peer-focus:text-xs peer-focus:font-semibold peer-focus:text-piid-blue
+           peer-[:not(:placeholder-shown)]:top-2
+           peer-[:not(:placeholder-shown)]:text-xs
+           peer-[:not(:placeholder-shown)]:font-semibold
+           peer-[:not(:placeholder-shown)]:text-slate-500;
+  }
+
+  /* A <select> always "has a value", so its label sits raised permanently. */
+  .ui-label--static {
+    @apply pointer-events-none absolute left-4 top-2 text-xs font-semibold text-slate-500;
+  }
+
+  .ui-error {
+    @apply mt-1.5 flex items-start gap-1.5 pl-1 text-sm font-medium text-rose-600;
+  }
+
+  /* ===== SECTION: BUTTONS ===== */
+  .ui-btn-primary {
+    @apply w-full rounded-2xl bg-slate-900 px-6 py-4 text-base font-bold uppercase tracking-[0.2em]
+           text-white shadow-card transition-all duration-300 ease-in-out
+           hover:-translate-y-0.5 hover:bg-slate-800
+           active:translate-y-0
+           disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
+  }
+
+  /* ===== SECTION: STATUS CARDS (scanner feedback) ===== */
+  .ui-status {
+    @apply animate-pop-in rounded-3xl p-6 text-center shadow-card sm:p-8;
+  }
+  .ui-status--valid {
+    /* emerald-800 text on emerald-50 passes WCAG AA (Spec 2 — Accessibility) */
+    @apply bg-emerald-50 text-emerald-900 ring-4 ring-emerald-500;
+  }
+  .ui-status--rejected {
+    @apply bg-rose-50 text-rose-900 ring-4 ring-rose-500;
+  }
+  .ui-status--retry {
+    @apply bg-amber-50 text-amber-900 ring-4 ring-amber-500;
+  }
+  .ui-status--idle {
+    @apply bg-white text-slate-500 ring-2 ring-slate-200;
+  }
+}
+
+/* ===== SECTION: SCANNER VIEWPORT =====
+   html5-qrcode injects its own markup; these rules stop it from
+   breaking the rounded card or overflowing on small phones. */
+#piid-scanner-region video {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+#piid-scanner-region img[alt='Info icon'] {
+  display: none !important;
+}
