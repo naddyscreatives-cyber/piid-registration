@@ -117,7 +117,7 @@ export default function UiAdminPage() {
       {phase === 'blocked' ? (
         <div className="flex min-h-[80vh] items-center justify-center">
           <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-card">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-amber-600">
+            <p className="ui-eyebrow text-amber-600">
               Cannot start scanning
             </p>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">{problem}</p>
