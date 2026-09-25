@@ -15,6 +15,8 @@ import { useMemo, useState } from 'react';
 import { UiTextField, UiSelectField, UiConsentCheckbox } from './FormFields';
 import { PROFESSIONS, PROFESSION_OTHER } from '@/lib/professions';
 import { val_registrationForm, ui_formatMobileAsTyped } from '@/lib/validation';
+import { UiLogoRow } from './Brand';
+import { PARTNER_LOGOS, SOCIAL_LOGOS, EVENT_NAME } from '@/lib/brand';
 
 /** The empty form. Kept at module scope so a reset is one assignment. */
 const EMPTY_FORM = {
@@ -155,13 +157,17 @@ export default function UiRegistrationForm() {
       onSubmit={ui_handleSubmit}
       className="w-full rounded-3xl bg-white p-6 shadow-card sm:p-9"
     >
+      {/* ===== SECTION: PARTNER LOGOS ===== */}
+      <UiLogoRow logos={PARTNER_LOGOS} scale={0.55} gapClass="gap-x-3" className="mb-7 border-b border-slate-100 pb-6 sm:hidden" />
+      <UiLogoRow logos={PARTNER_LOGOS} scale={0.85} className="mb-8 hidden border-b border-slate-100 pb-7 sm:flex" />
+
       <div className="mb-7">
-        <p className="text-xs font-bold uppercase tracking-[0.32em] text-piid-blue">Welcome</p>
-        <h1 className="mt-1 text-4xl font-extrabold leading-none tracking-tight text-slate-900 sm:text-5xl">
+        <p className="ui-eyebrow text-piid-blue">Welcome</p>
+        <h1 className="ui-h1 mt-1">
           Register now
         </h1>
-        <p className="mt-3 text-sm leading-relaxed text-slate-500">
-          One form, one QR ticket. Show it at the door and at every showroom you visit.
+        <p className="ui-body mt-3">
+          Please register to receive your digital QR pass and present it for check-in at each showroom.
         </p>
       </div>
 
@@ -336,15 +342,15 @@ function UiSuccessCard({ result }) {
         &#10003;
       </div>
 
-      <p className="mt-6 text-xs font-bold uppercase tracking-[0.32em] text-emerald-600">
+      <p className="ui-eyebrow mt-6 text-emerald-600">
         You&apos;re registered
       </p>
-      <h1 className="mt-2 text-4xl font-extrabold leading-none tracking-tight text-slate-900 sm:text-5xl">
+      <h1 className="ui-h1 mt-2">
         Welcome, {result.firstName}!
       </h1>
 
       {result.emailSent ? (
-        <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-slate-500">
+        <p className="ui-body mx-auto mt-4 max-w-sm">
           Your QR ticket is on its way to your inbox. Screenshot it now — venue signal
           can be unreliable on the day.
         </p>
@@ -363,14 +369,47 @@ function UiSuccessCard({ result }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={result.qrDataUrl}
-            alt="Your PIID Summit QR ticket"
+            alt={`Your ${EVENT_NAME} QR pass`}
             className="mx-auto h-56 w-56 rounded-2xl border-2 border-slate-200 bg-white p-3 sm:h-64 sm:w-64"
           />
-          <p className="mt-3 text-xs text-slate-400">
+          <p className="mt-3 text-xs leading-relaxed text-slate-400">
             Screenshot this code — it is your ticket for every showroom.
           </p>
         </div>
       ) : null}
+
+      {/* ===== SECTION: FOLLOW US ===== */}
+      <div className="mx-auto mt-7 max-w-[17rem] rounded-2xl bg-slate-50 px-4 py-4 ring-1 ring-slate-100">
+        <p className="flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
+          <UiInstagramIcon />
+          Follow us
+        </p>
+        <ul className="mt-3 grid grid-cols-2 divide-x divide-slate-200">
+          {SOCIAL_LOGOS.map((logo) => (
+            <li key={logo.key}>
+              <a
+                href={logo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Follow ${logo.name} on Instagram (opens in a new tab)`}
+                className="group flex flex-col items-center gap-1.5 px-2 transition-all duration-300 ease-in-out hover:-translate-y-0.5"
+              >
+                <span className="flex h-6 items-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={logo.src}
+                    alt={logo.name}
+                    width={Math.round(logo.height * 0.7 * logo.ratio)}
+                    height={Math.round(logo.height * 0.7)}
+                    style={{ height: Math.round(logo.height * 0.7), width: 'auto' }}
+                  />
+                </span>
+                <span className="text-[11px] font-medium text-slate-500 transition-colors duration-300 group-hover:text-slate-700">{logo.handle}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="mt-8 border-t border-slate-100 pt-6">
         <p className="text-xs leading-relaxed text-slate-400">
@@ -385,5 +424,19 @@ function UiSuccessCard({ result }) {
         </p>
       </div>
     </div>
+  );
+}
+
+/**
+ * UiInstagramIcon — small outline Instagram glyph for the follow box.
+ * @returns {JSX.Element}
+ */
+function UiInstagramIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+    </svg>
   );
 }

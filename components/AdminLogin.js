@@ -61,11 +61,11 @@ export default function UiAdminLogin({ onSignedIn }) {
 
   return (
     <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-card sm:p-9">
-      <p className="text-xs font-bold uppercase tracking-[0.32em] text-piid-blue">Admin</p>
-      <h1 className="mt-1 text-4xl font-extrabold leading-none tracking-tight text-slate-900">
+      <p className="ui-eyebrow text-piid-blue">Admin</p>
+      <h1 className="ui-h1 mt-1">
         Sign in
       </h1>
-      <p className="mt-3 text-sm leading-relaxed text-slate-500">
+      <p className="ui-body mt-3">
         Use your showroom&apos;s account. Your showroom is set on the account itself — you
         will see it confirmed on the next screen before you scan.
       </p>
