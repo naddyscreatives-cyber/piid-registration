@@ -23,7 +23,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /** A few registrations per IP per minute stops bot floods without touching real guests. */
-const RATE_LIMIT = 5;
+const RATE_LIMIT = 50;           // per IP per minute — high enough for a whole venue on shared Wi-Fi
 const RATE_WINDOW_MS = 60_000;
 
 /**
